@@ -1,0 +1,59 @@
+Temos que fazer o relatório, isto é responder às questões que estão na folha que o stor mandou;
+
+Temos que perguntar ao stor se os resultados estão certos;
+
+
+ """
+def ex_4(file_dir):
+
+    file_name=file_dir.split("\\")[-1]
+    file_extension=file_name.split(".")[-1]
+
+
+    if file_extension=="txt":
+
+        alfabeto=np.concatenate([np.arange(65,91),np.arange(97,123)])
+        #alfabeto_letras=list(map(chr,list(alfabeto)))
+        
+        
+        
+        file=open(file_dir,"r")
+        src=file.read()
+        src= list(map(ord,list(src))) #para aplicar a função ord em todos os elementos da lista,depois converto para lista pois é me devolvido um ponteiro para a lista
+        src= np.array(list(filter(lambda a: (91>a>=65) or (123>a>=91) , src)))
+        
+        
+        index_count=f.count(src,alfabeto) 
+
+        index_count = np.array(list(filter(lambda a: a!=0 , index_count)))
+        codec = huf.HuffmanCodec.from_data(src)
+        symbols,lengths = codec.get_code_len()
+        f.average(index_count,lengths)
+        
+        
+    
+    elif file_extension=="wav":
+        samplerate, src = wavfile.read(file_dir)
+        alfabeto=np.arange(256)
+        
+        counted_=f.count(src,alfabeto)
+        counted_ = np.array(list(filter(lambda a: a!=0,counted_)))
+        src=np.array(src)
+        codec = huf.HuffmanCodec.from_data(src)
+        symbols,lengths = codec.get_code_len()
+        
+
+        f.average(counted_,lengths)
+
+    if file_extension=="bmp":
+    
+        _alfabeto=np.arange(256)
+        src=np.array(Image.open(file_dir)).flatten()
+        counted_=f.count(src,_alfabeto)
+        counted_ = np.array(list(filter(lambda a : a!=0 ,counted_ )))
+        Codec = huf.HuffmanCodec.from_data(src)
+        symbols,lengths = Codec.get_code_len()
+        
+        f.average(counted_,lengths)
+        
+"""
