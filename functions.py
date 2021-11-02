@@ -37,18 +37,29 @@ def entalphy(index_count):
 """
 def entalphy(index_count):
 
-    index_count= np.array(index_count)
-    total_cases=np.sum(index_count)
-    index_count_prob = index_count/total_cases
+    
+    index_count_prob = index_count/np.sum(index_count)
     index_count_prob = np.delete(index_count_prob,np.where(index_count_prob==0))
     
-    index_count = index_count/total_cases
+    index_count = index_count/np.sum(index_count)
     index_count = np.delete(index_count,np.where(index_count==0))
     index_count = np.log2(index_count)
     index_count = index_count*index_count_prob
     entalphy_= -1*np.sum(index_count)
 
     print(entalphy_)
+
+def entalphy_X_Y(X,Y,alfabeto):
+    Y = np.array(Y)
+    X = np.array(X)
+
+    index_count_Y = count(Y,alfabeto)
+    
+    entalphy_Y = entalphy(index_count_Y)
+    interseption = np.intersect1d(X,Y)
+    index_count_interseption_X = count(X,interseption)
+    index_count_interseption_Y = count(Y,interseption)
+
 
 def average(index_count,length):
 
