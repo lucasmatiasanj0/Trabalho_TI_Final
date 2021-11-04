@@ -46,8 +46,10 @@ def entalphy(index_count):
     index_count = np.log2(index_count)
     index_count = index_count*index_count_prob
     entalphy_= -1*np.sum(index_count)
+    
 
-    print(entalphy_)
+    return entalphy_
+    
 
 def entalphy_X_Y(X,Y,alfabeto):
     Y = np.array(Y)
@@ -56,9 +58,14 @@ def entalphy_X_Y(X,Y,alfabeto):
     index_count_Y = count(Y,alfabeto)
     
     entalphy_Y = entalphy(index_count_Y)
-    interseption = np.intersect1d(X,Y)
-    index_count_interseption_X = count(X,interseption)
-    index_count_interseption_Y = count(Y,interseption)
+    y_x = np.setdiff1d(Y,X)
+    index_count_y_x = count(Y,y_x)
+    entalphy_y_x = entalphy(index_count_y_x)
+
+    final_entaphy = entalphy_Y - entalphy_y_x
+    print(final_entaphy)
+
+    
 
 
 def average(index_count,length):
@@ -70,8 +77,7 @@ def average(index_count,length):
     print(np.sum(index_count))
     
 
-    
-    
+entalphy_X_Y([6,8,9,7,2,4,9,9,4,9],[2,6,4,10,5,9,5,8,0,8],[0,1,2,3,4,5,6,7,8,9,10])
     
     
     

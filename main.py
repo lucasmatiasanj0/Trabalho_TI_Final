@@ -17,7 +17,7 @@ def ex_2():
     src=src_and_alfabeto[0]
     alfabeto=src_and_alfabeto[1]
     index_count=f.count(src,alfabeto)
-    f.entalphy(index_count)
+    print(f.entalphy(index_count))
 
 def ex_3_and_ex_4(file_dir,ex_4):
 
@@ -30,7 +30,7 @@ def ex_3_and_ex_4(file_dir,ex_4):
         src=np.array(Image.open(file_dir)).flatten()
         counted_=f.count(src,_alfabeto)
         if ex_4==0:
-            f.entalphy(counted_)
+            print(f.entalphy(counted_))
             f.show_graphic(counted_,_alfabeto)
 
         else:
@@ -47,7 +47,7 @@ def ex_3_and_ex_4(file_dir,ex_4):
         counted_=f.count(src,alfabeto)
 
         if ex_4==0:
-            f.entalphy(counted_)
+            print(f.entalphy(counted_))
             f.show_graphic(counted_,alfabeto)
         
         else:
@@ -75,7 +75,7 @@ def ex_3_and_ex_4(file_dir,ex_4):
         counted_=f.count(src,alfabeto)
 
         if ex_4==0:
-            f.entalphy(counted_)
+            print(f.entalphy(counted_))
             f.show_graphic(counted_,alfabeto_letras)
         
         else:
