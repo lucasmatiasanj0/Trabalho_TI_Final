@@ -51,20 +51,64 @@ def entalphy(index_count):
     return entalphy_
     
 
-def entalphy_X_Y(X,Y,alfabeto):
-    Y = np.array(Y)
-    X = np.array(X)
+def entalphy_X_Y(target,query,alfabeto):
 
-    index_count_Y = count(Y,alfabeto)
+    # Y=query
+    # X = target
+    query = np.array(query)
+    target= np.array(target)
+    print(query)
+    print(target)
+
+    entalphy(count(query,alfabeto))
+
+    """
+    entalphy_query = entalphy(count(query,alfabeto))
+
+    interception = np.setdiff1d(query,target)
+    slash = entalphy(count(query,interception))
+    print(entalphy_query-slash)
+    print(interception)
+    """
+
+
+    interception = np.intersect1d(query,target)
+    index_count_interception = count(query,interception)+count(target,interception)
+    print(interception)
+    print(index_count_interception)
+    print(entalphy(index_count_interception))
     
+"""
+    print(entalphy(count(target,alfabeto))+entalphy_query - 2.1219)
+    
+    query_slash_target = np.setdiff1d(query,target)
+    
+    index_count_query_slash_target = count(query,query_slash_target)
+    
+    entalphy_query_slash_target = entalphy(np.array(index_count_query_slash_target))
+    
+    final_entalphy = entalphy_query-entalphy_query_slash_target
+    
+
+"""
+"""
     entalphy_Y = entalphy(index_count_Y)
+    entalphy_X = entalphy(index_count_X)
+
     y_x = np.setdiff1d(Y,X)
-    index_count_y_x = count(Y,y_x)
-    entalphy_y_x = entalphy(index_count_y_x)
+    
+    print(y_x)
+    
+    index_count_y_inter = count(Y,y_x)
+    index_count_x_inter = count(X,y_x)
+    index_count_inter = index_count_y_inter+index_count_x_inter 
+    print(index_count_inter)  
+    entalphy_y_x = entalphy(index_count_inter)
+    print(entalphy_y_x)
 
-    final_entaphy = entalphy_Y - entalphy_y_x
+    final_entaphy = (entalphy_Y+entalphy_X) - entalphy_y_x
     print(final_entaphy)
-
+"""
     
 
 
@@ -77,7 +121,8 @@ def average(index_count,length):
     print(np.sum(index_count))
     
 
-entalphy_X_Y([6,8,9,7,2,4,9,9,4,9],[2,6,4,10,5,9,5,8,0,8],[0,1,2,3,4,5,6,7,8,9,10])
+#entalphy_X_Y([6,8,9,7,2,4,9,9,4,9],[2,6,4,10,5,9,5,8,0,8],np.arange(11))
+#print(np.histogram([6,8,9,7,2,4,9,9,4,9],[2,6,4,10,5,9,5,8,0,8],bin))
     
     
     

@@ -30,14 +30,14 @@ def ex_3_and_ex_4(file_dir,ex_4):
         src=np.array(Image.open(file_dir)).flatten()
         counted_=f.count(src,_alfabeto)
         if ex_4==0:
-            print(f.entalphy(counted_))
+            f.entalphy(counted_)
             f.show_graphic(counted_,_alfabeto)
 
         else:
+            
             counted_ = np.array(list(filter(lambda a : a!=0 ,counted_ )))
             Codec = huf.HuffmanCodec.from_data(src)
             symbols,lengths = Codec.get_code_len()
-        
             f.average(counted_,lengths)
 
     elif file_extension=="wav":
@@ -47,7 +47,7 @@ def ex_3_and_ex_4(file_dir,ex_4):
         counted_=f.count(src,alfabeto)
 
         if ex_4==0:
-            print(f.entalphy(counted_))
+            f.entalphy(counted_)
             f.show_graphic(counted_,alfabeto)
         
         else:
@@ -64,8 +64,6 @@ def ex_3_and_ex_4(file_dir,ex_4):
         alfabeto=np.concatenate([np.arange(65,91),np.arange(97,123)])
         alfabeto_letras=list(map(chr,list(alfabeto)))
         
-        
-        
         file=open(file_dir,"r")
         src=file.read()
         src= list(map(ord,list(src))) #para aplicar a função ord em todos os elementos da lista,depois converto para lista pois é me devolvido um ponteiro para a lista
@@ -75,7 +73,7 @@ def ex_3_and_ex_4(file_dir,ex_4):
         counted_=f.count(src,alfabeto)
 
         if ex_4==0:
-            print(f.entalphy(counted_))
+            f.entalphy(counted_)
             f.show_graphic(counted_,alfabeto_letras)
         
         else:
@@ -83,6 +81,43 @@ def ex_3_and_ex_4(file_dir,ex_4):
             codec = huf.HuffmanCodec.from_data(src)
             symbols,lengths = codec.get_code_len()
             f.average(counted_,lengths)
+
+def ex_5(src):
+    inicial=0
+    final=2
+
+    
+    file=open("data\\english.txt","r")
+    src=file.read()
+    src= list(map(ord,list(src))) #para aplicar a função ord em todos os elementos da lista,depois converto para lista pois é me devolvido um ponteiro para a lista
+    src= list(filter(lambda a: (91>a>=65) or (123>a>=91) , src))
+    src= list(map(chr,list(src)))
+    src = list(map(str,list(src)))
+    
+    src_final=[]
+    src_letras=[]
+    alfabeto=[]
+    while final <= len(src):
+
+        src_final.append("".join(list(map(str,list(map(ord,src[inicial:final]))))))
+
+        if "".join(list(map(str,list(map(str,src[inicial:final]))))) not in src_letras:
+            
+            src_letras.append("".join(list(map(str,list(map(str,src[inicial:final]))))))
+            alfabeto.append("".join(list(map(str,list(map(ord,src[inicial:final]))))))
+
+        final+=2
+        inicial=final-2
+    
+
+    src_final = np.array(list(map(int,src_final)))
+    alfabeto = np.array(list(map(int,alfabeto)))
+    alfabeto_letras = np.array(src_letras)
+    
+    print(alfabeto)
+    print(src_final)
+    index_count = f.count(src_final,alfabeto)
+    f.show_graphic(index_count,alfabeto_letras)
 
 
 def ex_6_a(query,target,alfabeto,passo):
@@ -93,6 +128,7 @@ def ex_6_a(query,target,alfabeto,passo):
         compare=target[index_inicial:index_final]
         index_final+=passo
         index_inicial+=passo
+        f.entalphy_X_Y(compare,query,alfabeto)
         
         
     
@@ -102,7 +138,9 @@ def ex_6_a(query,target,alfabeto,passo):
 if __name__ == "__main__":
     # ex_1()
     # ex_2()
-    ex_3_and_ex_4("data\\english.txt",0)
+    #ex_3_and_ex_4("data\\homer.bmp",1)
 
+    ex_5(["a","b","a","b","e","f"])
+    #print(list(set(["a","a","a","b","b","c"])))
     
-    #ex_6_a([2,6,4,10,5,9,5,8,0,8],[6,8,9,7,2,4,9,9,4,9,1,4,8,0,1,2,2,6,3,2,0,7,4,9,5,4,8,5,2,7,8,0,7,4,8,5,7,4,3,2,2,7,3,5,2,7,4,9,9,6],[0,1,2,3,4,5,6,7,8,9,10],3  )
+    #ex_6_a([2,6,4,10,5,9,5,8,0,8],[6,8,9,7,2,4,9,9,4,9,1,4,8,0,1,2,2,6,3,2,0,7,4,9,5,4,8,5,2,7,8,0,7,4,8,5,7,4,3,2,2,7,3,5,2,7,4,9,9,6],[0,1,2,3,4,5,6,7,8,9,10],1 )
