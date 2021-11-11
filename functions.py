@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import math as m
 
 
 def create_src():
@@ -14,21 +13,7 @@ def count(src,alfabeto):
         index_count.append(np.count_nonzero(src==i))
 
     return np.array(index_count) 
-
-def count_improved(src,alfabeto):
-    index_count_dict = {}
-
     
-    for i in src:
-        if i not in index_count_dict:
-            index_count_dict.setdefault(i,1)
-            
-        else:
-            index_count_dict.update({i:index_count_dict[i]+1})
-            
-    return np.array(list(index_count_dict.values()))
-    
-
 def show_graphic(index_count,alfabeto_):
     
     
@@ -38,18 +23,8 @@ def show_graphic(index_count,alfabeto_):
     plt.title("Histograma")
     plt.locator_params(axis='y', integer=True)
     plt.show()
-"""
-def entalphy(index_count):
-    _entalphy=[]
-    total_cases=np.sum(index_count)
-    for i in index_count:
-        if i!=0:
-            probability=i/total_cases
-            _entalphy.append((probability)*(m.log2(probability)))
-    
-    print((-1)*np.sum(_entalphy))
 
-"""
+
 def entalphy(index_count):
     
     index_count_prob = index_count/np.sum(index_count)
@@ -71,13 +46,11 @@ def entalphy_X_Y(target,query,alfabeto):
     
     # Info Mut = H(X)+H(Y)-H(X,Y)
     
-    #intersect=[]
     alfabeto_ = {}
     
     for i in range(len(query)):
 
         new_tuple = (query[i],target[i])
-        #intersect.append(new_tuple)
         
         if new_tuple in alfabeto_:
             alfabeto_.update({new_tuple:alfabeto_[new_tuple]+1})
@@ -90,16 +63,7 @@ def entalphy_X_Y(target,query,alfabeto):
     intersect_entalphy = entalphy(index_count) 
     
     return entalphy_X+entalphy_Y-intersect_entalphy
-    #index_count = count_improved(intersect,alfabeto)
-    #print(index_count)
-    #intersect_entalphy = entalphy(index_count) 
     
-    
-    
-    
-    
-    
-        
     
 def average(index_count,length):
     
@@ -107,14 +71,16 @@ def average(index_count,length):
     index_count = index_count*np.array(length)
     print(np.sum(index_count))
 
-#query = np.array([2,6,4,10,5,9,5,8,0,8])
-#target = np.array([6,8,9,7,2,4,9,9,4,9,1,4,8,0,1,2,2,6,3,2,0,7,4,9,5,4,8,5,2,7,8,0,7,4,8,5,7,4,3,2,2,7,3,5,2,7,4,9,9,6])
-#alfabeto = [0,1,2,3,4,5,6,7,8,9,10]
 
-#print(entalphy_X_Y(target,query,))
-#print(np.histogram([6,8,9,7,2,4,9,9,4,9],[2,6,4,10,5,9,5,8,0,8],bin))
+
+            
+    
+    
 
     
+    
+    
+        
     
     
     

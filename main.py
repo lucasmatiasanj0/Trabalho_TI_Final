@@ -20,9 +20,9 @@ def ex_2():
     index_count=f.count(src,alfabeto)
     print(f.entalphy(index_count))
 
-def ex_3_and_ex_4(file_dir,ex_4):
-
-    file_name=file_dir.split("\\")[-1]
+def ex_3_and_ex_4(file_name,ex_4):
+    
+    file_dir = "./data/"+file_name
     file_extension=file_name.split(".")[-1]
 
     if file_extension=="bmp":
@@ -84,10 +84,10 @@ def ex_3_and_ex_4(file_dir,ex_4):
             
             f.average(counted_,lengths)
 
-def ex_5(file_dir):
+def ex_5(file_name):
     inicial=0
-    final=2 
-    file_name=file_dir.split("\\")[-1]
+    final=1 
+    file_dir = "./data/"+file_name
     file_extension=file_name.split(".")[-1]
 
     if file_extension =="txt":
@@ -98,91 +98,68 @@ def ex_5(file_dir):
         src= list(filter(lambda a: (91>a>=65) or (123>a>=91) , src))
         src= list(map(chr,list(src)))
         
-        src_final=[]
-        src_letras=[]
-        alfabeto=[]
         
-        while final <= len(src):
-            ord_joined = int("".join(list(map(str,list(map(ord,src[inicial:final]))))))
-            letras_joined = "".join(src[inicial:final])
-            src_final.append(ord_joined)
+        dict_count = {}
+        
+        while final < len(src):
             
-            if  letras_joined not in src_letras:
+            newTuple = (src[inicial],src[final])
+            
+            if  newTuple  in dict_count:
+                dict_count.update({newTuple:dict_count[newTuple]+1})
                 
-                src_letras.append(letras_joined)
-                alfabeto.append(ord_joined)
-
-            
-            final+=2
-            inicial = final-2
-            
-
-        src_final = np.array(src_final)
-        alfabeto = np.array(alfabeto)
-        alfabeto_letras = np.array(src_letras)
+            else:
+                dict_count.setdefault(newTuple,1)
+                
+            final+=1
+            inicial = final-1
         
-        index_count = f.count(src_final,alfabeto)
-        print(f.entalphy(index_count))
-        f.show_graphic(index_count,alfabeto_letras)
+        print(f.entalphy(list(dict_count.values()))/2)
     
     if file_extension == "bmp":
 
         src = list(np.array(Image.open(file_dir)).flatten())
         src = list(map(str,src))
 
-        src_final = []
-        alfabeto = []
-
-        while final <= len(src):
+        dict_count = {}
+        
+        while final < len(src):
             
-            joined = int("".join(src[inicial:final]))
-            src_final.append(joined)
+            newTuple = (src[inicial],src[final])
             
-            if joined not in alfabeto:
-                alfabeto.append(joined)
+            if  newTuple  in dict_count:
+                dict_count.update({newTuple:dict_count[newTuple]+1})
+                
+            else:
+                dict_count.setdefault(newTuple,1)
+                
+            final+=1
+            inicial = final-1
 
-            
-            final+=2
-            inicial = final-2
-
-        src_final = np.array(src_final)
-        alfabeto = np.array(alfabeto)
-        index_count = f.count(src_final,alfabeto)
-        print(index_count)
-        print(alfabeto)
-        print(f.entalphy(index_count))
-        #f.show_graphic(index_count,np.array(list(map(str,alfabeto))))
-        f.show_graphic(index_count,alfabeto)
+        print(f.entalphy(list(dict_count.values()))/2)
+        
 
     if file_extension == "wav":
 
         samplerate, src = wavfile.read(file_dir)
         src = list(map(str,src))
 
-        src_final = []
-        alfabeto = []
+        dict_count ={}
 
-        while final <= len(src):
-            joined = int("".join(src[inicial:final]))
-            src_final.append(joined)
+        while final < len(src):
             
-            if joined not in alfabeto:
-                alfabeto.append(joined)
+            newTuple = (src[inicial],src[final])
+            
+            if  newTuple  in dict_count:
+                dict_count.update({newTuple:dict_count[newTuple]+1})
+                
+            else:
+                dict_count.setdefault(newTuple,1)
+                
+            final+=1
+            inicial = final-1
 
-            final+=2
-            inicial = final-2   
-
-        src_final = np.array(src_final)
-        alfabeto = np.array(alfabeto)
-        index_count = f.count(src_final,alfabeto)
-        
-        print(src_final)
-        print(alfabeto)
-        print(f.entalphy(index_count))
-        print(index_count)
-        #f.show_graphic(index_count,np.array(list(map(str,alfabeto))))
-        f.show_graphic(index_count,alfabeto)
-
+        print(f.entalphy(list(dict_count.values()))/2)
 
 def ex_6_a(query,target,alfabeto,passo):
     
@@ -200,8 +177,6 @@ def ex_6_a(query,target,alfabeto,passo):
     return np.array(infmut)
 
 def ex_6_b():
-    #target01_repeat = [6,8,9,7,2,4,9,9,4,9,1,4,8,0,1,2,2,6,3,2,0,7,4,9,5,4,8,5,2,7,8,0,7,4,8,5,7,4,3,2,2,7,3,5,2,7,4,9,9,6]
-    #saxriff = [2,6,4,10,5,9,5,8,0,8]
     
     samplerate, guitarSolo = wavfile.read("data\\guitarSolo.wav")
     
@@ -211,6 +186,13 @@ def ex_6_b():
     f_01 = ex_6_a(guitarSolo,target01_repeat,np.arange(256),round(len(guitarSolo)/4))
     f_02 = ex_6_a(guitarSolo,target02_repeatNoise,np.arange(256),round(len(guitarSolo)/4))
     
+    
+    plt.plot(f_01,label = "Target01 - repeat")
+    plt.plot(f_02,label= "target02 - repeatNoise")
+    plt.legend()
+    plt.show()
+    
+    """
     min_01 = np.amin(f_01)
     max_01 = np.amax(f_01)
     variacao_01 = max_01 - min_01
@@ -220,7 +202,7 @@ def ex_6_b():
     max_02 = np.amax(f_02)
     variacao_02 = max_02 - min_02
     print("Variação "+str(round(variacao_02,4)))
-    
+    """
 
 def ex_6_c():
     samplerate, guitarSolo = wavfile.read("data\\guitarSolo.wav")
@@ -232,7 +214,53 @@ def ex_6_c():
         maxValue = sorted_infMut[-1]
         print("Valor máximo da informação mútua no fihcheiro Song0"+str(i)+".wav é : "+str(maxValue))
         
-  
+
+def menu():
+    
+    opcao=100
+    
+    while opcao!=0:
+        
+        print("---------MENU---------")
+        print("1 - Exercício 1")
+        print("2 - Exercício 2")
+        print("3 - Exercício 3")
+        print("4 - Exercício 4")
+        print("5 - Exercício 5")
+        print("6 - Exercício 6")
+        print("0 - Exit")
+        opcao = int(input("Qual a alinea que deseja correr??"))
+    
+        if opcao==0:
+            quit()
+        if opcao == 1: 
+            ex_1()
+        elif opcao == 2:
+            ex_2()
+        elif opcao == 3:
+            file_name = input("Qual o nome do ficheiro??")
+            ex_3_and_ex_4(file_name,0)
+        elif opcao == 4:
+            file_name = input("Qual o nome do ficheiro??")
+            ex_3_and_ex_4(file_name,1)
+        elif opcao == 5:
+            file_name = input("Qual o nome do ficheiro??")
+            ex_5(file_name)
+        
+        elif opcao == 6:
+            seis_alinea = input("Qual alinea deseja fazer??(a/b/c)").lower()
+            
+            if seis_alinea.lower() == "a":
+                passo = int(input("Qual o passo??:"))
+                query = np.array([2,6,4,10,5,9,5,8,0,8])
+                target = np.array([6,8,9,7,2,4,9,9,4,9,1,4,8,0,1,2,2,6,3,2,0,7,4,9,5,4,8,5,2,7,8,0,7,4,8,5,7,4,3,2,2,7,3,5,2,7,4,9,9,6])
+                alfabeto = np.arange(11)
+                print(ex_6_a(query,target,alfabeto,passo)) 
+                
+            elif seis_alinea == "b":
+                ex_6_b()
+            elif seis_alinea == "c":
+                ex_6_c()
  
 if __name__ == "__main__":
     # ex_1()
@@ -240,12 +268,11 @@ if __name__ == "__main__":
     #ex_3_and_ex_4("data\\english.txt",0)
     #ex_3_and_ex_4("data\\english.txt",1)
 
-    #ex_5("data\\english.txt") 
+    #ex_5("english.txt") 
 
-    query = np.array([2,6,4,10,5,9,5,8,0,8])
-    target = np.array([6,8,9,7,2,4,9,9,4,9,1,4,8,0,1,2,2,6,3,2,0,7,4,9,5,4,8,5,2,7,8,0,7,4,8,5,7,4,3,2,2,7,3,5,2,7,4,9,9,6])
-    alfabeto = [0,1,2,3,4,5,6,7,8,9,10]
-    print(ex_6_a(query,target,alfabeto,1))
+    
+    #print(ex_6_a(query,target,alfabeto,1))
     #ex_6_b()
     #ex_6_c()
+    menu()
     
