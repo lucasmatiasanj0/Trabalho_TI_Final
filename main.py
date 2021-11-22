@@ -1,3 +1,4 @@
+from numpy.core.fromnumeric import size
 import functions as f
 from PIL import Image
 from scipy.io import wavfile
@@ -5,11 +6,9 @@ import numpy as np
 import string
 import huffmancodec as huf
 import matplotlib.pyplot as plt
+import math as m
 
-def ex_1():
-    src_and_alfabeto=f.create_src()
-    src=src_and_alfabeto[0]
-    alfabeto=src_and_alfabeto[1]
+def ex_1(src,alfabeto):
     index_count=f.count(src,alfabeto)
     f.show_graphic(index_count,alfabeto)
 
@@ -30,17 +29,27 @@ def ex_3_and_ex_4(file_name,ex_4):
         _alfabeto=np.arange(256)
         src=np.array(Image.open(file_dir)).flatten()
         counted_=f.count(src,_alfabeto)
+        
         if ex_4==0:
-            print(f.entalphy(counted_))
+            entropia = f.entalphy(counted_)
+            hmax = np.log2(len(_alfabeto))
+            taxa = ((hmax-entropia)/hmax)*100
+            print("Entropia:",entropia)
+            print("Taxa",taxa)
             f.show_graphic(counted_,_alfabeto)
 
         else:
-            
             counted_ = np.array(list(filter(lambda a : a!=0 ,counted_ )))
             Codec = huf.HuffmanCodec.from_data(src)
             symbols,lengths = Codec.get_code_len()
-            f.average(counted_,lengths)
-
+            
+            e_x = f.average(counted_,lengths)
+            e_x_2 = f.average(counted_,np.power(lengths,2))
+            var = e_x_2-(e_x**2)
+            
+            print("Huffman :" ,e_x)
+            print("Variância",var)
+            
     elif file_extension=="wav":
 
         samplerate, src = wavfile.read(file_dir)
@@ -48,7 +57,11 @@ def ex_3_and_ex_4(file_name,ex_4):
         counted_=f.count(src,alfabeto)
 
         if ex_4==0:
-            print(f.entalphy(counted_))
+            entropia = f.entalphy(counted_)
+            hmax = np.log2(len(alfabeto))
+            taxa = ((hmax-entropia)/hmax)*100
+            print("Entropia:",entropia)
+            print("Taxa",taxa)
             f.show_graphic(counted_,alfabeto)
         
         else:
@@ -57,7 +70,12 @@ def ex_3_and_ex_4(file_name,ex_4):
             codec = huf.HuffmanCodec.from_data(src)
             symbols,lengths = codec.get_code_len()
             
-            f.average(counted_,lengths)
+            e_x = f.average(counted_,lengths)
+            e_x_2 = f.average(counted_,np.power(lengths,2))
+            var = e_x_2-(e_x**2)
+            
+            print("Huffman :",e_x)
+            print("Variância:",var)
             
     
     elif file_extension=="txt":
@@ -74,7 +92,11 @@ def ex_3_and_ex_4(file_name,ex_4):
         counted_=f.count(src,alfabeto)
 
         if ex_4==0:
-            print(f.entalphy(counted_))
+            entropia = f.entalphy(counted_)
+            hmax = np.log2(len(alfabeto))
+            taxa = ((hmax-entropia)/hmax)*100
+            print("Entropia:",entropia)
+            print("Taxa",taxa)
             f.show_graphic(counted_,alfabeto_letras)
         
         else:
@@ -82,8 +104,19 @@ def ex_3_and_ex_4(file_name,ex_4):
             codec = huf.HuffmanCodec.from_data(src)
             symbols,lengths = codec.get_code_len()
             
-            f.average(counted_,lengths)
-
+            e_x = f.average(counted_,lengths)
+            e_x_2 = f.average(counted_,np.power(lengths,2))
+            var = e_x_2-(e_x**2)
+            
+            print("Huffman :" ,e_x)
+            print("Variância:",var)
+            
+            
+            
+            
+            
+            
+            
 def ex_5(file_name):
     inicial=0
     final=1 
@@ -102,7 +135,6 @@ def ex_5(file_name):
         dict_count = {}
         
         while final < len(src):
-            
             newTuple = (src[inicial],src[final])
             
             if  newTuple  in dict_count:
@@ -192,27 +224,28 @@ def ex_6_b():
     plt.legend()
     plt.show()
     
-    """
-    min_01 = np.amin(f_01)
-    max_01 = np.amax(f_01)
-    variacao_01 = max_01 - min_01
-    print("Variação "+str(round(variacao_01,4)))
     
-    min_02 = np.amin(f_02)
-    max_02 = np.amax(f_02)
-    variacao_02 = max_02 - min_02
-    print("Variação "+str(round(variacao_02,4)))
-    """
 
 def ex_6_c():
     samplerate, guitarSolo = wavfile.read("data\\guitarSolo.wav")
+    inf_mut_max_values=[]
     
     for i in range(1,8):
         samplerate, song__ = wavfile.read("data\\Song0"+str(i)+".wav")
     
-        sorted_infMut = np.sort(ex_6_a(guitarSolo,song__,np.arange(256),round(len(guitarSolo))))
-        maxValue = sorted_infMut[-1]
-        print("Valor máximo da informação mútua no fihcheiro Song0"+str(i)+".wav é : "+str(maxValue))
+        infMut_array = ex_6_a(guitarSolo,song__,np.arange(256),round(len(guitarSolo)/4))
+        print(infMut_array)
+        f.create_simple_plot(infMut_array,"Song0"+str(i)+".wav")
+
+        
+        inf_mut_max_values.append(np.amax(infMut_array))
+    
+    inf_mut_max_values_sorted = np.sort(inf_mut_max_values)
+    
+        
+    for i in range(1,8):
+        maxValue = inf_mut_max_values_sorted[-i] 
+        print("Valor máximo da informação mútua no fihcheiro Song0"+str(i+1)+".wav é : "+str(maxValue))
         
 
 def menu():
@@ -234,7 +267,10 @@ def menu():
         if opcao==0:
             quit()
         if opcao == 1: 
-            ex_1()
+            src_and_alfabeto=f.create_src()
+            src=src_and_alfabeto[0]
+            alfabeto=src_and_alfabeto[1]
+            ex_1(src,alfabeto)
         elif opcao == 2:
             ex_2()
         elif opcao == 3:
@@ -266,7 +302,7 @@ if __name__ == "__main__":
     # ex_1()
     # ex_2()
     #ex_3_and_ex_4("data\\english.txt",0)
-    #ex_3_and_ex_4("data\\english.txt",1)
+    #ex_3_and_ex_4("english.txt",1)
 
     #ex_5("english.txt") 
 

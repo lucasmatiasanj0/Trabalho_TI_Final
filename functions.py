@@ -69,19 +69,9 @@ def average(index_count,length):
     
     index_count = index_count/np.sum(index_count)
     index_count = index_count*np.array(length)
-    print(np.sum(index_count))
+    return np.sum(index_count)
 
-
-
-            
-    
-    
-
-    
-    
-    
-        
-    
-    
-    
-
+def create_simple_plot(array,title):
+    plt.plot(np.arange(len(array)),array,np.arange(len(array)),array, '.')
+    plt.title(title)
+    plt.show()
